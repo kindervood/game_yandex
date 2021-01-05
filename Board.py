@@ -19,6 +19,16 @@ class Board:
         self.left = 15
         self.top = 15
         self.otstup = 5
+        grass = load_image("grass.png")
+        grass2 = load_image("grass2.png")
+        glade = load_image("glade.png")
+        glade2 = load_image("glade2.png")
+        forest = load_image("forest.png")
+        forest2 = load_image("forest2.png")
+        mount = load_image("mount.png")
+        mount2 = load_image("mount2.png")
+        village = load_image("village.png")
+        village2 = load_image("village2.png")
 
     def render(self, screen):
         # button to main_menu
@@ -31,13 +41,32 @@ class Board:
             for y in range(self.height):
                 cell = self.board[y][x]
                 if cell == 0:
-                    pygame.draw.rect(screen, 'white',
+                    screen.blit(grass,
                                      (self.cell_size * x + self.left,
                                       y * self.cell_size + self.top, self.cell_size,
                                       self.cell_size), 1)
-                # TODO: pictures of cells
+                
                 if cell == 1:
-                    pass
+                    screen.blit(glade,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+                if cell == 2:
+                    screen.blit(forest,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+                
+                if cell == 3:
+                    screen.blit(mount,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+               if cell == 4:
+                    screen.blit(village,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)       
 
         pygame.display.flip()
 
