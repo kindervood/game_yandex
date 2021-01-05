@@ -9,8 +9,6 @@ class Shop(pygame.sprite.Sprite):
     image_rofl = load_image("rofl.jpg")
 
     def __init__(self, *group):
-        # НЕОБХОДИМО вызвать конструктор родительского класса Sprite.
-        # Это очень важно!!!
         super().__init__(*group)
         self.image = Shop.image_shop
         self.image_rofl = Shop.image_rofl
