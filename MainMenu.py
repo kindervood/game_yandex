@@ -1,5 +1,7 @@
 import pygame
 import Board
+from Main import load_image
+import Shop
 
 PLAYING_WINDOW_SIZE = 800, 800
 
@@ -90,15 +92,26 @@ class Menu:
         board = Board.Board()
         running_game = True
         screen = pygame.display.set_mode(PLAYING_WINDOW_SIZE)
+
+        # создадим группу, содержащую все спрайты
+        all_sprites = pygame.sprite.Group()
+        # добавляем спрайты
+        Shop.Shop(all_sprites)
+        # рисуем все спрайты на screen
+        all_sprites.draw(screen)
         while running_game:
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running_game = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     board.get_click(event.pos)
+                    all_sprites.update(event)
 
-                screen.fill((0, 0, 0))
-                board.render(screen)
+            screen.fill((0, 0, 0))
+            all_sprites.draw(screen)
+            board.render(screen)
+            pygame.display.flip()
 
     def show_records(self):
         pass
