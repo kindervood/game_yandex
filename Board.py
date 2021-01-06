@@ -56,6 +56,7 @@ class Board:
             self.btn_quit_pressed()
 
     def get_cell(self, mouse_pos):
+        # получение координаты клетки относительно всего поля
         x, y = (
             (mouse_pos[0] - self.left) // self.cell_size,
             (mouse_pos[1] - self.top) // self.cell_size)
@@ -69,6 +70,7 @@ class Board:
 
     def btn_quit_pressed(self):
         # TODO: records and some statistic
+        # to main menu
         main_menu = MainMenu.Menu()
         running = True
         screen = pygame.display.set_mode(WINDOW_SIZE)

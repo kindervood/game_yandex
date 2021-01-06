@@ -1,9 +1,11 @@
 import pygame
 import Board
+import Records
 from Main import load_image
 import Shop
 
 PLAYING_WINDOW_SIZE = 800, 800
+WINDOW_SIZE = 600, 600
 
 
 class Menu:
@@ -22,7 +24,7 @@ class Menu:
 
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
-        self.gray = (50, 50, 50)
+        self.grey = (50, 50, 50)
         self.red = (255, 0, 0)
         self.green = (0, 255, 0)
         self.blue = (0, 0, 255)
@@ -114,4 +116,13 @@ class Menu:
             pygame.display.flip()
 
     def show_records(self):
-        pass
+        records = Records.Records()
+        running = True
+        screen = pygame.display.set_mode(WINDOW_SIZE)
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+                records.render(screen, event)
