@@ -1,7 +1,5 @@
 import pygame
-from MainMenu import Menu
-import os
-import sys
+import MainMenu
 
 CELL_SIZE = 50
 PLAYING_WINDOW_SIZE = 800, 800
@@ -9,17 +7,6 @@ WINDOW_SIZE = 600, 600
 BTN_SIZE = 25, 25
 CELL_COUNTRY = (5, 20)  # ячейка деревни
 PUT_DO_IMAGES = 'images'
-
-
-def load_image(name, colorkey=None):
-    fullname = os.path.join(
-        PUT_DO_IMAGES, name)
-    # если файл не существует, то выходим
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    return image
 
 
 class Board:
@@ -69,7 +56,9 @@ class Board:
             self.btn_quit_pressed()
 
     def get_cell(self, mouse_pos):
-        x, y = ((mouse_pos[0] - self.left) // self.cell_size, (mouse_pos[1] - self.top) // self.cell_size)
+        x, y = (
+            (mouse_pos[0] - self.left) // self.cell_size,
+            (mouse_pos[1] - self.top) // self.cell_size)
         if 0 <= x < self.width and 0 <= y < self.height:
             return x, y
         return -1, -1
@@ -77,10 +66,10 @@ class Board:
     def on_click_cell(self, cell_coords):
         x, y = cell_coords
         # TODO: show info about cell
-    
+
     def btn_quit_pressed(self):
         # TODO: records and some statistic
-        main_menu = Menu()
+        main_menu = MainMenu.Menu()
         running = True
         screen = pygame.display.set_mode(WINDOW_SIZE)
 
@@ -91,12 +80,8 @@ class Board:
 
                 screen.fill((0, 0, 0))
                 main_menu.render(screen, event)
-                
-                
+
     def get_distance_vector(self, cell_click):
-        global CELL_COUNTRY
-        try:
-            S = (abs(self.cell_country[0] - cell_click[0]) + abs(self.cell_country[1] - cell_click[1])) ** 0.5
-        except TypeError:
-            S = 'вы нажали НЕ на клетку'
+        S = (abs(self.cell_country[0] - cell_click[0]) + abs(
+            self.cell_country[1] - cell_click[1])) ** 0.5
         return S
