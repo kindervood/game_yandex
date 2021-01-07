@@ -22,6 +22,11 @@ class Board:
         self.top = 15
         self.otstup = 5
         self.cell_country = CELL_COUNTRY
+        self.grass = load_image("grass.png")
+        self.glade = load_image("glade.png")
+        self.forest = load_image("forest.png")
+        self.mount = load_image("mount.png")
+        self.village = load_image("village.png")
 
     def render(self, screen):
         # button to main_menu
@@ -34,13 +39,32 @@ class Board:
             for y in range(self.height):
                 cell = self.board[y][x]
                 if cell == 0:
-                    pygame.draw.rect(screen, 'white',
+                    screen.blit(grass,
                                      (self.cell_size * x + self.left,
                                       y * self.cell_size + self.top, self.cell_size,
                                       self.cell_size), 1)
-                # TODO: pictures of cells
-                if cell == 1:
-                    pass
+                # TODO: pictures of cells	                    
+                if cell == 1:	                if cell == 1:
+                    pass	                    screen.blit(self.glade,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+                if cell == 2:
+                    screen.blit(self.forest,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+
+                if cell == 3:
+                    screen.blit(mount,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+               if cell == 4:
+                    screen.blit(village,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
 
         pygame.display.flip()
 
