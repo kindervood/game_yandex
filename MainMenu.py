@@ -32,13 +32,22 @@ class Menu:
 
         self.selected = 'start'
 
+        ######################################################## testing input text
+        self.input_box = pygame.Rect(370, 25, 140, 32)
+        self.color_inactive = pygame.Color('black')
+        self.color_active = pygame.Color('red')
+        self.color = self.color_inactive
+        self.active = False
+        self.text = ''
+        #######################################################
+
     def render(self, screen, event):
-        # is it ok?
+        # обработка события
         self.event_processing(event)
 
         screen.fill(self.blue)
 
-        # optimize
+        # элементы меню
         title = self.text_format("Yandex game", 85, self.yellow)
         if self.selected == "start":
             text_start = self.text_format("START", 75, self.white)
@@ -63,6 +72,17 @@ class Menu:
         screen.blit(text_start, (self.width / 2 - (start_rect[2] / 2), 300))
         screen.blit(text_records, (self.width / 2 - (records_rect[2] / 2), 360))
         screen.blit(text_quit, (self.width / 2 - (quit_rect[2] / 2), 420))
+
+        #####################testing input box
+        font = pygame.font.Font(None, 32)
+        txt_surface = font.render(self.text, True, self.color)
+
+        # Blit the text.
+        screen.blit(txt_surface, (self.input_box.x + 5, self.input_box.y + 5))
+        # Blit the input_box rect.
+        pygame.draw.rect(screen, self.color, self.input_box, 2)
+        ####################################
+
         pygame.display.flip()
 
     def event_processing(self, event):
@@ -74,7 +94,7 @@ class Menu:
             elif event.key == pygame.K_DOWN:
                 if self.count < self.count_btns - 1:
                     self.count += 1
-
+            # подсветка выбранного элемента
             self.selected = self.btns_in_menu[self.count]
             if event.key == pygame.K_RETURN:
                 if self.selected == "start":
@@ -84,6 +104,22 @@ class Menu:
                 if self.selected == "quit":
                     pygame.quit()
                     quit()
+            # возможность ввода в поле
+            if self.active:
+                if event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    if len(self.text) < 10:
+                        self.text += event.unicode
+
+        # активация поля при нажатии
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.input_box.collidepoint(event.pos):
+                # Toggle the active variable.
+                self.active = not self.active
+            else:
+                self.active = False
+            self.color = self.color_active if self.active else self.color_inactive
 
     def text_format(self, message, text_size, text_color):
         f2 = pygame.font.SysFont('serif', text_size)
@@ -113,6 +149,7 @@ class Menu:
             screen.fill((0, 0, 0))
             all_sprites.draw(screen)
             board.render(screen)
+
             pygame.display.flip()
 
     def show_records(self):
