@@ -129,7 +129,7 @@ class Menu:
     def start_game(self):
         board = Board.Board()
         running_game = True
-        screen = pygame.display.set_mode(PLAYING_WINDOW_SIZE)
+        screen = pygame.display.set_mode(PLAYING_WINDOW_SIZE, flags=pygame.NOFRAME)
 
         # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
@@ -155,7 +155,7 @@ class Menu:
     def show_records(self):
         records = Records.Records()
         running = True
-        screen = pygame.display.set_mode(WINDOW_SIZE)
+        screen = pygame.display.set_mode(WINDOW_SIZE, flags=pygame.NOFRAME)
 
         while running:
             for event in pygame.event.get():
