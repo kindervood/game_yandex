@@ -73,7 +73,7 @@ class Board:
         # to main menu
         main_menu = MainMenu.Menu()
         running = True
-        screen = pygame.display.set_mode(WINDOW_SIZE)
+        screen = pygame.display.set_mode(WINDOW_SIZE, flags=pygame.NOFRAME)
 
         while running:
             for event in pygame.event.get():
