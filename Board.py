@@ -1,12 +1,10 @@
 import pygame
-import MainMenu
+from MainMenu import Menu
 
 CELL_SIZE = 50
 PLAYING_WINDOW_SIZE = 800, 800
 WINDOW_SIZE = 600, 600
 BTN_SIZE = 25, 25
-CELL_COUNTRY = (5, 20)  # ячейка деревни
-PUT_DO_IMAGES = 'images'
 
 
 class Board:
@@ -21,7 +19,16 @@ class Board:
         self.left = 15
         self.top = 15
         self.otstup = 5
-        self.cell_country = CELL_COUNTRY
+        self.grass = load_image("grass.png")
+        self.grass2 = load_image("grass2.png")
+        self.glade = load_image("glade.png")
+        self.glade2 = load_image("glade2.png")
+        self.forest = load_image("forest.png")
+        self.forest2 = load_image("forest2.png")
+        self.mount = load_image("mount.png")
+        self.mount2 = load_image("mount2.png")
+        self.village = load_image("village.png")
+        self.village2 = load_image("village2.png")
 
     def render(self, screen):
         # button to main_menu
@@ -34,13 +41,32 @@ class Board:
             for y in range(self.height):
                 cell = self.board[y][x]
                 if cell == 0:
-                    pygame.draw.rect(screen, 'white',
+                    screen.blit(grass,
                                      (self.cell_size * x + self.left,
                                       y * self.cell_size + self.top, self.cell_size,
                                       self.cell_size), 1)
-                # TODO: pictures of cells
+                    
                 if cell == 1:
-                    pass
+                    screen.blit(self.glade,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+                if cell == 2:
+                    screen.blit(self.forest,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+                
+                if cell == 3:
+                    screen.blit(mount,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)
+               if cell == 4:
+                    screen.blit(village,
+                                     (self.cell_size * x + self.left,
+                                      y * self.cell_size + self.top, self.cell_size,
+                                      self.cell_size), 1)       
 
         pygame.display.flip()
 
@@ -56,10 +82,7 @@ class Board:
             self.btn_quit_pressed()
 
     def get_cell(self, mouse_pos):
-        # получение координаты клетки относительно всего поля
-        x, y = (
-            (mouse_pos[0] - self.left) // self.cell_size,
-            (mouse_pos[1] - self.top) // self.cell_size)
+        x, y = ((mouse_pos[0] - self.left) // self.cell_size, (mouse_pos[1] - self.top) // self.cell_size)
         if 0 <= x < self.width and 0 <= y < self.height:
             return x, y
         return -1, -1
@@ -70,8 +93,7 @@ class Board:
 
     def btn_quit_pressed(self):
         # TODO: records and some statistic
-        # to main menu
-        main_menu = MainMenu.Menu()
+        main_menu = Menu()
         running = True
         screen = pygame.display.set_mode(WINDOW_SIZE)
 
@@ -82,8 +104,3 @@ class Board:
 
                 screen.fill((0, 0, 0))
                 main_menu.render(screen, event)
-
-    def get_distance_vector(self, cell_click):
-        S = (abs(self.cell_country[0] - cell_click[0]) + abs(
-            self.cell_country[1] - cell_click[1])) ** 0.5
-        return S
