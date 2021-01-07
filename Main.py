@@ -25,7 +25,7 @@ if __name__ == '__main__':
     pygame.init()
     # размеры окна:
     width, height = WINDOW_SIZE
-    screen = pygame.display.set_mode([width, height])
+    screen = pygame.display.set_mode([width, height], flags=pygame.NOFRAME)
     running = True
     main_menu = MainMenu.Menu()
 
