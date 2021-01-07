@@ -20,11 +20,18 @@ def load_image(name):
     return image
 
 
+def text_format(message, text_size, text_color, shrift='serif'):
+    f2 = pygame.font.SysFont(shrift, text_size)
+    text2 = f2.render(message, False, text_color)
+    return text2
+
+
 if __name__ == '__main__':
     # инициализация Pygame:
     pygame.init()
     # размеры окна:
     width, height = WINDOW_SIZE
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "500,25"
     screen = pygame.display.set_mode([width, height], flags=pygame.NOFRAME)
     running = True
     main_menu = MainMenu.Menu()

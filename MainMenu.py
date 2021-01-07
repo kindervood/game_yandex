@@ -1,10 +1,12 @@
 import pygame
 import Board
 import Records
-from Main import load_image
 import Shop
 
-PLAYING_WINDOW_SIZE = 800, 800
+from Main import text_format
+
+
+PLAYING_WINDOW_SIZE = 800, 700
 WINDOW_SIZE = 600, 600
 
 
@@ -48,19 +50,19 @@ class Menu:
         screen.fill(self.blue)
 
         # элементы меню
-        title = self.text_format("Yandex game", 85, self.yellow)
+        title = text_format("Yandex game", 85, self.yellow)
         if self.selected == "start":
-            text_start = self.text_format("START", 75, self.white)
+            text_start = text_format("START", 75, self.white)
         else:
-            text_start = self.text_format("START", 75, self.black)
+            text_start = text_format("START", 75, self.black)
         if self.selected == 'records':
-            text_records = self.text_format("RECORDS", 75, self.white)
+            text_records = text_format("RECORDS", 75, self.white)
         else:
-            text_records = self.text_format("RECORDS", 75, self.black)
+            text_records = text_format("RECORDS", 75, self.black)
         if self.selected == "quit":
-            text_quit = self.text_format("QUIT", 75, self.white)
+            text_quit = text_format("QUIT", 75, self.white)
         else:
-            text_quit = self.text_format("QUIT", 75, self.black)
+            text_quit = text_format("QUIT", 75, self.black)
 
         title_rect = title.get_rect()
         start_rect = text_start.get_rect()
@@ -121,16 +123,10 @@ class Menu:
                 self.active = False
             self.color = self.color_active if self.active else self.color_inactive
 
-    def text_format(self, message, text_size, text_color):
-        f2 = pygame.font.SysFont('serif', text_size)
-        text2 = f2.render(message, False, text_color)
-        return text2
-
     def start_game(self):
         board = Board.Board()
         running_game = True
         screen = pygame.display.set_mode(PLAYING_WINDOW_SIZE, flags=pygame.NOFRAME)
-
         # создадим группу, содержащую все спрайты
         all_sprites = pygame.sprite.Group()
         # добавляем спрайты
