@@ -4,6 +4,7 @@ import MainMenu
 WINDOW_SIZE = 600, 600
 BTN_SIZE = 20, 20
 
+
 class Records:
     def __init__(self):
         self.width, self.height = WINDOW_SIZE
@@ -51,7 +52,7 @@ class Records:
         # возвращение в главное меню
         main_menu = MainMenu.Menu()
         running = True
-        screen = pygame.display.set_mode(WINDOW_SIZE)
+        screen = pygame.display.set_mode(WINDOW_SIZE, flags=pygame.NOFRAME)
 
         while running:
             for event in pygame.event.get():
