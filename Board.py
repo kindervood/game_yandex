@@ -34,13 +34,27 @@ class Board:
             for y in range(self.height):
                 cell = self.board[y][x]
                 if cell == 0:
-                    pygame.draw.rect(screen, 'white',
-                                     (self.cell_size * x + self.left,
-                                      y * self.cell_size + self.top, self.cell_size,
-                                      self.cell_size), 1)
-                # TODO: pictures of cells
+                    screen.blit(self.grass,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+
                 if cell == 1:
-                    pass
+                    screen.blit(self.glade,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top,))
+                if cell == 2:
+                    screen.blit(self.forest,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top,))
+
+                if cell == 3:
+                    screen.blit(self.mount,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+                if cell == 4:
+                    screen.blit(self.village,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
 
         pygame.display.flip()
 
