@@ -16,12 +16,23 @@ class Board:
         with open('board.txt') as input_file:
             for line in input_file:
                 self.board.append(list(map(int, line.split())))
+        self.food = 10
+        self.people = 10
+        self.stone = 10
         self.width = len(self.board[0])
         self.height = len(self.board)
         self.left = 15
         self.top = 15
         self.otstup = 5
-        self.cell_country = CELL_COUNTRY
+        self.grass = load_image("grass.png")
+        self.grass = pygame.transform.scale(self.grass, (50, 50))
+        self.glade = load_image("glade.png")
+        self.glade = pygame.transform.scale(self.glade, (50, 50))
+        self.forest = load_image("forest.png")
+        self.forest = pygame.transform.scale(self.forest, (50, 50))
+        self.mount = load_image("mount.png")
+        self.mount = pygame.transform.scale(self.mount, (50, 50))
+        self.text = self.text_format("Деревня  " + self.food + self.people + self.stone, 75, self.white)
 
     def render(self, screen):
         # button to main_menu
@@ -34,14 +45,28 @@ class Board:
             for y in range(self.height):
                 cell = self.board[y][x]
                 if cell == 0:
-                    pygame.draw.rect(screen, 'white',
-                                     (self.cell_size * x + self.left,
-                                      y * self.cell_size + self.top, self.cell_size,
-                                      self.cell_size), 1)
-                # TODO: pictures of cells
-                if cell == 1:
-                    pass
+                    screen.blit(self.grass,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
 
+                if cell == 1:
+                    screen.blit(self.glade,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top,))
+                if cell == 2:
+                    screen.blit(self.forest,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top,))
+
+                if cell == 3:
+                    screen.blit(self.mount,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+                if cell == 4:
+                    screen.blit(self.village,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+        screen.blit(self.text, 500, 0)
         pygame.display.flip()
 
     def get_click(self, mouse_pos):
