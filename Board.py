@@ -34,13 +34,43 @@ class Board:
             for y in range(self.height):
                 cell = self.board[y][x]
                 if cell == 0:
-                    pygame.draw.rect(screen, 'white',
-                                     (self.cell_size * x + self.left,
-                                      y * self.cell_size + self.top, self.cell_size,
-                                      self.cell_size), 1)
-                # TODO: pictures of cells
+                    screen.blit(self.grass,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+
                 if cell == 1:
-                    pass
+                    screen.blit(self.glade,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top,))
+                if cell == 2:
+                    screen.blit(self.forest,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top,))
+
+                if cell == 3:
+                    screen.blit(self.mount,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+                if cell == 4:
+                    screen.blit(self.village,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
+        screen.blit(self.text, 650, 0)
+        screen.blit(self.activ_cell, 600, 0)
+        pygame.display.flip()
+
+    def get_click(self, mouse_pos, screen):
+        # is it cell?
+        if self.left < mouse_pos[0] < self.width * self.cell_size + self.left and \
+                self.top < mouse_pos[1] < self.height * self.cell_size + self.top:
+            cell = self.get_cell(mouse_pos)
+            self.on_click_cell(cell, screen)
+        # is it quit btn?
+        if PLAYING_WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup < mouse_pos[0] < PLAYING_WINDOW_SIZE[0] \
+                - self.otstup and self.otstup < mouse_pos[1] < BTN_SIZE[1] + self.otstup:
+            self.btn_quit_pressed()
+        if 500 < mouse_pos[0] < 600 and 400 < mouse_pos[1] < 445:
+            self.mining(cell)
 
         pygame.display.flip()
 
@@ -64,9 +94,17 @@ class Board:
             return x, y
         return -1, -1
 
-    def on_click_cell(self, cell_coords):
+    def on_click_cell(self, cell_coords, screen):
         x, y = cell_coords
-        # TODO: show info about cell
+        self.cell = self.board[y][x]
+        if self.cell == 0:
+            self.activ_cell = self.text_format("Пустое поле", 45, self.white)
+        if self.cell == 1:
+            self.activ_cell = self.text_format("Река с ягодами", 45, self.white)
+        if self.cell == 2:
+            self.activ_cell = self.text_format("Горы", 45, self.white)
+        if self.cell == 3:
+            self.activ_cell = self.text_format("Лес", 45, self.white)
 
     def btn_quit_pressed(self):
         # TODO: records and some statistic
