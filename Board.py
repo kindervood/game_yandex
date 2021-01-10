@@ -45,8 +45,13 @@ class Board:
         self.forest = pygame.transform.scale(self.forest, (50, 50))
         self.mount = load_image("mount.png")
         self.mount = pygame.transform.scale(self.mount, (50, 50))
+        self.village = load_image("vilage.png")
+        self.mount = pygame.transform.scale(self.mount, (50, 50))
         self.text = text_format("Деревня  " + self.f + self.p + self.s + self.w, 15, (255, 255, 255))
-        self.activ_cell = text_format("", 45, (255, 255, 255))
+        self.activ_cell = text_format("", 15, (255, 255, 255))
+        self.next = load_image("next.png")
+        self.next = pygame.transform.scale(next, (100, 50))
+        self.flag = False
 
     def render(self, screen):
         # button to main_menu
@@ -54,7 +59,8 @@ class Board:
                          (PLAYING_WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup,
                           self.otstup, BTN_SIZE[0],
                           BTN_SIZE[1]))
-        pygame.draw.rect(screen, 'red', (500, 400, 100, 45))
+        pygame.draw.rect(screen, 'red', (600, 400, 50, 45))
+        screen.blit(self.next, (600, 500))
 
         for x in range(self.width):
             for y in range(self.height):
@@ -77,10 +83,10 @@ class Board:
                     screen.blit(self.mount,
                                 (self.cell_size * x + self.left,
                                  y * self.cell_size + self.top))
-                #if cell == 4:
-                    #screen.blit(self.village,
-                                #(self.cell_size * x + self.left,
-                                 #y * self.cell_size + self.top))
+                if cell == 4:
+                    screen.blit(self.village,
+                                (self.cell_size * x + self.left,
+                                 y * self.cell_size + self.top))
         screen.blit(self.text, (650, 0))
         screen.blit(self.activ_cell, (600, 0))
         pygame.display.flip()
@@ -91,8 +97,12 @@ class Board:
                 self.top < mouse_pos[1] < self.height * self.cell_size + self.top:
             cell = self.get_cell(mouse_pos)
             self.on_click_cell(cell)
-            if 500 < mouse_pos[0] < 600 and 400 < mouse_pos[1] < 445:
-                self.mining(cell)# кнопка дабыть
+            self.flag = True
+        else:
+            self.flag = False
+        if 500 < mouse_pos[0] < 600 and 400 < mouse_pos[1] < 445 and self.flag == True:
+            cell = self.get_cell(mouse_pos)
+            self.mining(cell)# кнопка дабыть
         # is it quit btn?
         if PLAYING_WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup < mouse_pos[0] < PLAYING_WINDOW_SIZE[0] \
                 - self.otstup and self.otstup < mouse_pos[1] < BTN_SIZE[1] + self.otstup:
@@ -144,7 +154,7 @@ class Board:
         x, y = cell_coords
         self.cell = self.board[y][x]
         if self.cell == 1:
-            self.food += 5
+            self.food += 2
             self.people -= 1
         if self.cell == 2:
             self.stone += 2
