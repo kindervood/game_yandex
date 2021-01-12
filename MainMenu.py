@@ -5,7 +5,6 @@ import Shop
 
 from Main import text_format
 
-
 PLAYING_WINDOW_SIZE = 800, 700
 WINDOW_SIZE = 600, 600
 
@@ -141,6 +140,12 @@ class Menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     board.get_click(event.pos)
                     all_sprites.update(event)
+
+                # ПРИ НАЖАТИИ НА КАРТИНКУ МАГАЗИН
+                image_rect = Shop.Shop().return_rect()
+                if image_rect.collidepoint(
+                        pygame.mouse.get_pos()) and event.type == pygame.MOUSEBUTTONDOWN:
+                    Shop.Shop().store_catalog(screen)
 
             screen.fill((0, 0, 0))
             all_sprites.draw(screen)
