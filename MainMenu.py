@@ -5,7 +5,6 @@ import Shop
 
 from Main import text_format
 
-
 PLAYING_WINDOW_SIZE = 800, 700
 WINDOW_SIZE = 600, 600
 
@@ -127,26 +126,62 @@ class Menu:
         board = Board.Board()
         running_game = True
         screen = pygame.display.set_mode(PLAYING_WINDOW_SIZE, flags=pygame.NOFRAME)
-        # создадим группу, содержащую все спрайты
-        all_sprites = pygame.sprite.Group()
+        # создадим группу, содержащую спрайт магазин
+        all_sprites_shop = pygame.sprite.Group()
         # добавляем спрайты
-        Shop.Shop(all_sprites)
-        # рисуем все спрайты на screen
-        all_sprites.draw(screen)
+        sprite = pygame.sprite.Sprite()
+        sprite.image = Shop.Shop().image_shop
+        image_transform_size = (150, 50)
+        sprite.image = pygame.transform.scale(sprite.image, image_transform_size)
+        sprite.rect = sprite.image.get_rect()
+        sprite.rect.x = 600
+        sprite.rect.y = 100
+        all_sprites_shop.add(sprite)
+
+        shop_clicker = False  # проверяет находится ли юзер в магазине
+        all_sprites_tovar = False
+        message = " "
         while running_game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running_game = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    message = " "
                     board.get_click(event.pos)
-                    all_sprites.update(event)
+                if event.type == pygame.MOUSEBUTTONDOWN and all_sprites_tovar:
+                    for tovar in all_sprites_tovar:
+                        message = Shop.Shop().get_info_tovar(tovar, screen, board)
+                        if message:
+                            break
 
-            screen.fill((0, 0, 0))
-            all_sprites.draw(screen)
-            board.render(screen)
+                # ПРИ НАЖАТИИ НА КАРТИНКУ МАГАЗИН
+                image_rect = sprite.rect
+                if image_rect.collidepoint(
+                        pygame.mouse.get_pos()) and event.type == pygame.MOUSEBUTTONDOWN:
+                    all_sprites_tovar, rect_store_catalog = Shop.Shop().store_catalog(screen, board)
+                    shop_clicker = not shop_clicker
+
+            # рисуем товар и рамку
+            if shop_clicker:
+                Shop.Shop().render(all_sprites_tovar, rect_store_catalog, message, screen)
+
+            self.draw_quantity_resources(screen)  # рисуем колличество ресурсов
+            all_sprites_shop.draw(screen)  # рисуем кнопку магазин
+            board.render(screen)  # рисуем игровое поле
 
             pygame.display.flip()
+
+            # Shop.Shop().resources(screen)
+            Shop.Shop().get_resources(board)
+
+            screen.fill((0, 0, 0))
+
+    def draw_quantity_resources(self, screen):
+        screen.blit(text_format(str(Shop.WOOD), 15, (255, 255, 255)), (610, 80))
+        screen.blit(text_format(str(Shop.STONE), 15, (255, 255, 255)), (650, 80))
+        screen.blit(text_format(str(Shop.FOOD), 15, (255, 255, 255)), (690, 80))
+        screen.blit(text_format(str(Shop.PEOPLE), 15, (255, 255, 255)), (730, 80))
 
     def show_records(self):
         records = Records.Records()
