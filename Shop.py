@@ -24,7 +24,9 @@ class Shop(pygame.sprite.Sprite):
         self.rect.x = 600
         self.rect.y = 100
 
-    def render(self, all_sprites_tovar, rect_store_catalog, message, screen):
+        self.text_error = ""
+
+    def render(self, all_sprites_tovar, rect_store_catalog, message, text_error, screen):
         # рисуем спрайты товаров
         all_sprites_tovar.draw(screen)
         # рисуем рамку
@@ -33,6 +35,9 @@ class Shop(pygame.sprite.Sprite):
         message = text_format(f"{message}", 50, (255, 255, 255))
         screen.blit(message, (0, 600))
 
+        w, h = self.image_transform_size
+        screen.blit(text_format(text_error, 20, "red"),
+                    (self.rect.x - 37, self.rect.y + h + 215))
 
     def store_catalog(self, screen, object):
         w, h = self.image_transform_size
@@ -83,23 +88,15 @@ class Shop(pygame.sprite.Sprite):
                     text = "Ничего не произошло"
                     break
             self.set_resources(object)
-            return text
-            # self.resources(screen)
-        return text
+            if self.text_error:
+                text = ""
+                return text, self.text_error
+            return text, self.text_error
+        return text, self.text_error
 
     def check_less_zero(self, name_resource, resource, deductible, screen):
         if resource - deductible < 0:
-            text_error = text_format(f"У вас недостаточно {name_resource}", 15, "red")
-
-            w, h = self.image_transform_size
-
-            screen.blit(text_error, (self.rect.x - 37, self.rect.y + h + 215))
-            pygame.display.flip()
-            # занести в поток
-            time.sleep(2)
-            text_error = text_format(f"У вас недостаточно {name_resource}", 15, "black")
-            #####
-            screen.blit(text_error, (self.rect.x - 37, self.rect.y + h + 215))
+            self.text_error = f"У вас недостаточно {name_resource}"
             return resource
         return resource - deductible
 
