@@ -148,11 +148,12 @@ class Menu:
                     running_game = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     message = " "
+                    text_error = " "
                     board.get_click(event.pos)
                 if event.type == pygame.MOUSEBUTTONDOWN and all_sprites_tovar:
                     for tovar in all_sprites_tovar:
-                        message = Shop.Shop().get_info_tovar(tovar, screen, board)
-                        if message:
+                        message, text_error = Shop.Shop().get_info_tovar(tovar, screen, board)
+                        if message or text_error:
                             break
 
                 # ПРИ НАЖАТИИ НА КАРТИНКУ МАГАЗИН
@@ -164,7 +165,8 @@ class Menu:
 
             # рисуем товар и рамку
             if shop_clicker:
-                Shop.Shop().render(all_sprites_tovar, rect_store_catalog, message, screen)
+                Shop.Shop().render(all_sprites_tovar, rect_store_catalog, message, text_error,
+                                   screen)
 
             self.draw_quantity_resources(screen)  # рисуем колличество ресурсов
             all_sprites_shop.draw(screen)  # рисуем кнопку магазин
