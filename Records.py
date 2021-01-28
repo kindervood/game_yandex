@@ -1,7 +1,9 @@
 import pygame
 import MainMenu
+import Shop
+from Main import load_image
 
-WINDOW_SIZE = 600, 600
+WINDOW_SIZE = 800, 800
 BTN_SIZE = 20, 20
 
 
@@ -27,10 +29,19 @@ class Records:
         title_rect = title.get_rect()
         screen.blit(title, (self.width / 2 - (title_rect[2] / 2), 80))
         # кнопка в главное меню
-        pygame.draw.rect(screen, 'red',
-                         (WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup,
-                          self.otstup, BTN_SIZE[0],
-                          BTN_SIZE[1]))
+        #pygame.draw.rect(screen, 'red',
+        #WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup,
+        #self.otstup, BTN_SIZE[0],
+        #BTN_SIZE[1]))
+
+        with open("records.txt", "r") as file:
+            data = file.readlines()
+        k = 0
+        for i in data:
+            stroka = self.text_format(i[:-1], 45, "white")
+            stroka_rect = stroka.get_rect()
+            screen.blit(stroka, (100, 170 + k))
+            k += 50
 
         pygame.display.flip()
 
@@ -49,6 +60,21 @@ class Records:
         return text2
 
     def to_main_menu(self):
+
+        tt = """3 3 3 3 3 3 3 3 3 3 3
+           3 3 3 3 3 3 3 3 3 3 3
+           0 2 1 2 0 0 0 0 0 0 0
+           0 2 1 2 0 0 0 0 0 0 0
+           0 2 1 2 0 0 4 0 0 0 0
+           0 2 1 2 0 0 0 0 0 0 0
+           0 2 1 2 0 0 0 0 0 0 0
+           0 2 1 2 0 0 0 2 2 2 0
+           0 2 1 2 0 0 0 2 2 2 0
+           0 2 1 2 0 0 0 2 2 2 0"""
+        with open('board.txt', 'w') as f:
+            f = f.write(tt)
+
+
         # возвращение в главное меню
         main_menu = MainMenu.Menu()
         running = True
