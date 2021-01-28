@@ -6,7 +6,7 @@ import MainMenu
 
 CELL_COUNTRY = (5, 20)  # ячейка деревни
 PATH = 'images'
-WINDOW_SIZE = (600, 600)
+WINDOW_SIZE = (800, 700)
 
 
 def load_image(name):
@@ -36,6 +36,19 @@ if __name__ == '__main__':
     running = True
     main_menu = MainMenu.Menu()
 
+    tt = """3 3 3 3 3 3 3 3 3 3 3
+    3 3 3 3 3 3 3 3 3 3 3
+    0 2 1 2 0 0 0 0 0 0 0
+    0 2 1 2 0 0 0 0 0 0 0
+    0 2 1 2 0 0 4 0 0 0 0
+    0 2 1 2 0 0 0 0 0 0 0
+    0 2 1 2 0 0 0 0 0 0 0
+    0 2 1 2 0 0 0 2 2 2 0
+    0 2 1 2 0 0 0 2 2 2 0
+    0 2 1 2 0 0 0 2 2 2 0"""
+    with open('board.txt', 'w') as f:
+        f = f.write(tt)
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -43,5 +56,3 @@ if __name__ == '__main__':
 
             screen.fill((0, 0, 0))
             main_menu.render(screen, event)
-
-
