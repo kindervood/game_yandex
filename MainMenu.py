@@ -3,16 +3,16 @@ import Board
 import Records
 import Shop
 
-from Main import text_format
+from Main import text_format, load_image
 
 PLAYING_WINDOW_SIZE = 800, 700
-WINDOW_SIZE = 600, 600
+WINDOW_SIZE = 800, 700
 
 
 class Menu:
     def __init__(self):
-        self.width = 600
-        self.height = 600
+        self.width = 800
+        self.height = 700
 
         self.count = 0
         # btns in main menu
@@ -34,7 +34,7 @@ class Menu:
         self.selected = 'start'
 
         ######################################################## testing input text
-        self.input_box = pygame.Rect(370, 25, 140, 32)
+        self.input_box = pygame.Rect(550, 25, 140, 32)
         self.color_inactive = pygame.Color('black')
         self.color_active = pygame.Color('red')
         self.color = self.color_inactive
@@ -49,7 +49,7 @@ class Menu:
         screen.fill(self.blue)
 
         # элементы меню
-        title = text_format("Yandex game", 85, self.yellow)
+        title = text_format("Выживание", 85, self.yellow)
         if self.selected == "start":
             text_start = text_format("START", 75, self.white)
         else:
@@ -98,8 +98,12 @@ class Menu:
             # подсветка выбранного элемента
             self.selected = self.btns_in_menu[self.count]
             if event.key == pygame.K_RETURN:
-                if self.selected == "start":
-                    self.start_game()
+
+                if self.selected == "start" and self.text != "" and self.text != "ВведитеИмя":
+                    self.start_game(self.text)
+                if self.selected == "start" and self.text == "":
+                    self.text = "ВведитеИмя"
+
                 if self.selected == 'records':
                     self.show_records()
                 if self.selected == "quit":
@@ -122,8 +126,8 @@ class Menu:
                 self.active = False
             self.color = self.color_active if self.active else self.color_inactive
 
-    def start_game(self):
-        board = Board.Board()
+    def start_game(self, text):
+        board = Board.Board(text)
         running_game = True
         screen = pygame.display.set_mode(PLAYING_WINDOW_SIZE, flags=pygame.NOFRAME)
         # создадим группу, содержащую спрайт магазин
@@ -141,7 +145,22 @@ class Menu:
         shop_clicker = False  # проверяет находится ли юзер в магазине
         all_sprites_tovar = False
         message = " "
+
+        Shop.LVL_VILLAGE = 0
+        Shop.STONE = 100
+        Shop.WOOD = 100
+        Shop.FOOD = 20
+        Shop.PEOPLE = 10
+        Shop.AXES, Shop.PICKAXES, Shop.SCISSORS = 0, 0, 0
+
+        image_villagee = load_image("vilage.jpg")
+        image_villagee = pygame.transform.scale(image_villagee, (50, 50))
+        Shop.Shop.image_village = image_villagee
+
+        Shop.Shop().set_resources(board)
         while running_game:
+
+            board.finish_game([])
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -149,7 +168,7 @@ class Menu:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     message = " "
                     text_error = " "
-                    board.get_click(event.pos)
+                    board.get_click(event.pos, screen)
                 if event.type == pygame.MOUSEBUTTONDOWN and all_sprites_tovar:
                     for tovar in all_sprites_tovar:
                         message, text_error = Shop.Shop().get_info_tovar(tovar, screen, board)
@@ -180,15 +199,17 @@ class Menu:
             screen.fill((0, 0, 0))
 
     def draw_quantity_resources(self, screen):
-        screen.blit(text_format(str(Shop.WOOD), 15, (255, 255, 255)), (610, 80))
-        screen.blit(text_format(str(Shop.STONE), 15, (255, 255, 255)), (650, 80))
-        screen.blit(text_format(str(Shop.FOOD), 15, (255, 255, 255)), (690, 80))
-        screen.blit(text_format(str(Shop.PEOPLE), 15, (255, 255, 255)), (730, 80))
+        screen.blit(text_format(str(int(Shop.WOOD)), 15, (255, 255, 255)), (610, 80))
+        screen.blit(text_format(str(int(Shop.STONE)), 15, (255, 255, 255)), (650, 80))
+        screen.blit(text_format(str(int(Shop.FOOD)), 15, (255, 255, 255)), (690, 80))
+        screen.blit(
+            text_format(f"{str(int(Shop.PEOPLE))}({str(Shop.PEOPLE_WORK)})", 15, (255, 255, 255)),
+            (730, 80))
 
     def show_records(self):
         records = Records.Records()
         running = True
-        screen = pygame.display.set_mode(WINDOW_SIZE, flags=pygame.NOFRAME)
+        screen = pygame.display.set_mode(WINDOW_SIZE)
 
         while running:
             for event in pygame.event.get():
