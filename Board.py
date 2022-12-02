@@ -47,7 +47,7 @@ class Board:
         self.vilage = load_image("vilage.jpg")
         self.vilage = pygame.transform.scale(self.vilage, (50, 50))
 
-        self.grass = load_image("grass.jpg")
+        self.grass = load_image("grass.png")
         self.grass = pygame.transform.scale(self.grass, (50, 50))
         self.river = load_image("river.jpg")
         self.river = pygame.transform.scale(self.river, (50, 50))
@@ -226,7 +226,7 @@ class Board:
         if 649 < mouse_pos[0] < 751 and 4 < mouse_pos[1] < 26:
             self.show_records()
 
-        # is it cell?
+        # проверка на клетку
         get_it_rect = self.sprite_get_it_rect
         if not get_it_rect.collidepoint(pygame.mouse.get_pos()):
             self.activ_cell = text_format("", 30, "red")  # помогает изабивться от много кликов
@@ -343,7 +343,6 @@ class Board:
             self.activ_cell = text_format(tata, 24, (255, 255, 255))
 
     def btn_quit_pressed(self):
-        # TODO: records and some statistic
         # to main menu
         Shop.PICKAXES, Shop.AXE, Shop.SCISSORS = 0, 0, 0
 
@@ -401,10 +400,9 @@ class Board:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         mouse_pos = event.pos
                         if 649 < mouse_pos[0] < 751 and 4 < mouse_pos[1] < 26:
-                            #MainMenu.Menu().start_game(f"{self.nickname}")
+                            # MainMenu.Menu().start_game(f"{self.nickname}")
                             self.btn_quit_pressed()
                             running = False
-
 
         elif day_10:
             all_text_end = []
@@ -495,17 +493,24 @@ class Board:
                 records.render(screen, event)
 
     def show_settings(self):
-        screen = pygame.display.set_mode([800, 700])
+        screen = pygame.display.set_mode([800, 700], flags=pygame.NOFRAME)
         running = True
         while running:
             for event in pygame.event.get():
+                # обработка событий
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    if WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup < mouse_pos[0] < WINDOW_SIZE[0] \
+                            - self.otstup and self.otstup < mouse_pos[1] < BTN_SIZE[1] + self.otstup:
+                        running = False
                 if event.type == pygame.QUIT:
                     running = False
 
             screen.fill((0, 0, 0))
+            pygame.draw.rect(screen, 'red',
+                             (WINDOW_SIZE[0] - BTN_SIZE[0] - self.otstup, self.otstup, BTN_SIZE[0], BTN_SIZE[1]))
 
-            text_settings = f"""Это экономическая игра, направленная на*
-улучшение ваших прагматических навыков.*
+            text_settings = f"""Это экономическая игра.*
 Вам предоставлена деревня с жителями,*
 вы её руководитель.*
 Управляйте жителями для добычи ресурсов,*
@@ -544,4 +549,3 @@ class Board:
                 screen.blit(text, [0, 0 + kk])
                 kk += 21.8
             pygame.display.flip()
-
